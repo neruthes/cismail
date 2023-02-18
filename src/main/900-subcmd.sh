@@ -79,9 +79,14 @@ case $1 in
         delta_sec="$((nowts-msgts))"
         delta_hr=$((delta_sec/3600))
         msg_stderr "Hint: Message was created at $(date --date=@"$msgts") ($((delta_hr/24))d $((delta_hr%24))hr ago)"
-        msg_stderr "Hint: Message was sent by '$from_name' ($from_kpid)"
         if [[ -n "$(contacts_v1_search "$from_kpid")" ]]; then
-            msg_stderr "Hint: Search result: $(contacts_v1_search "$from_kpid" | sed 's/|/ /')"
+            saved_name="$(contacts_v1_search "$from_kpid" | cut -d'|' -f1)"
+            # msg_stderr "Hint: Message was sent by '$from_name' ($from_kpid)"
+            if [[ "$saved_name" == "$from_name" ]]; then
+                msg_stderr "Hint: The sender is a contact: '$from_name' ($from_kpid)"
+            else
+                msg_stderr "Hint: The sender '$from_name' is a contact, but saved as another name '$saved_name' ($from_kpid)"
+            fi
         else
             msg_stderr "Hint: The sender is not a contact yet"
             msg_stderr "Hint: Run 'cismail add \"$from_name\" \"$from_kpid\"' to add contact"
