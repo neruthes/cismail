@@ -12,7 +12,7 @@ function age_getself() {
     else
         PrivKeyFile="$CONFDIR/self.age/$(head -n1 <<< "$MY_KEYPAIRS_LIST")"
     fi
-    echo "$(realpath "$PrivKeyFile")"
+    realpath "$PrivKeyFile"
 }
 function age_showpub() {
     PrivKeyFile="$1"

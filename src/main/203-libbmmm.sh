@@ -28,9 +28,6 @@ pad_unit_size=256
 [[ current_length -ge 4096 ]] && pad_unit_size=1024
 need_bytes="$((pad_unit_size-current_length%pad_unit_size-1))"
 part2="$(dd if=/dev/urandom of=/dev/stdout bs="$pad_unit_size" count=1 2>/dev/null | base64 -w0 | cut -c1-"$need_bytes")"
-# echo "current_length=$current_length"
-# echo "need_bytes=$need_bytes"
-# echo "==============="
 echo "$part1$part2"
 echo "$part3"
 }

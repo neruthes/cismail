@@ -8,4 +8,4 @@
 # The source code is available at <https://github.com/neruthes/cismail>.
 #
 
-APPVER="0.1.0"
+APPVER="0.1.1"

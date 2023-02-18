@@ -45,8 +45,8 @@ case $1 in
         rm $tmp_task.*
         ;;
     d|decrypt)
-        tmp_task="/tmp/.cismail-session-$RANDOM$RANDOM$RANDOM"
         ### argv: d encrypted-msg.asc
+        tmp_task="/tmp/.cismail-session-$RANDOM$RANDOM$RANDOM"
         msg_asc_file="$2"
         [[ -z "$msg_asc_file" ]] && msg_asc_file="/dev/stdin"
         
@@ -55,8 +55,7 @@ case $1 in
             privkeys_arr+=('-i' "$abspath")
         done
         
-        cat "$msg_asc_file" | grep -v ^- | base64 --decode | age -d "${privkeys_arr[@]}" > "$tmp_task.bmmm"
-        if [[ $? != 0 ]]; then
+        if ! (grep -v ^- "$msg_asc_file" | base64 --decode | age -d "${privkeys_arr[@]}" > "$tmp_task.bmmm" || exit 1); then
             echo "[ERROR] Cannot decrypt message. Is it malformed?"
             exit 1
         fi
@@ -65,10 +64,6 @@ case $1 in
         to_name="$(bmmm_get_header      to          "$tmp_task.bmmm")"
         to_kpid="$(bmmm_get_header      to_key      "$tmp_task.bmmm")"
         msgts="$(bmmm_get_header        time        "$tmp_task.bmmm")"
-        # echo "from_name=$from_name"
-        # echo "from_kpid=$from_kpid"
-        # echo "to_name=$to_name"
-        # echo "to_kpid=$to_kpid"
         if grep -sq "$(cut -d: -f3 <<< "$to_kpid")" "$CONFDIR/self.age/"*; then
             msg_stderr "Valid: The message is sent to us: ($to_name) $to_kpid"
         else
@@ -81,7 +76,6 @@ case $1 in
         msg_stderr "Hint: Message was created at $(date --date=@"$msgts") ($((delta_hr/24))d $((delta_hr%24))hr ago)"
         if [[ -n "$(contacts_v1_search "$from_kpid")" ]]; then
             saved_name="$(contacts_v1_search "$from_kpid" | cut -d'|' -f1)"
-            # msg_stderr "Hint: Message was sent by '$from_name' ($from_kpid)"
             if [[ "$saved_name" == "$from_name" ]]; then
                 msg_stderr "Hint: The sender is a contact: '$from_name' ($from_kpid)"
             else
