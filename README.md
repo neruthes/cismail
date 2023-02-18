@@ -35,6 +35,12 @@ cismail keygen 'John Appleseed'
 
 Keygen will add yourself to contacts list automatically.
 
+### Add Contact
+
+```shell
+cismail add Neruthes "kpid:age:age1s4zpwvrypemsn7ckn38uauedncy9m9yrn7dyak2trc7vst7mgpqskds8lg"
+```
+
 ### Encrypt
 
 ```shell
