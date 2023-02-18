@@ -8,6 +8,73 @@ Temporary documentation:
 Experimental implementation in shell script. Will migrate to Rust in future.
 
 
+
+
+
+## Installation
+
+```
+./make.sh build
+./make.sh local_install
+```
+
+
+
+
+## Usage
+
+
+### Keygen
+
+```shell
+# Simple keygen
+cismail keygen
+# Specify a name
+cismail keygen 'John Appleseed'
+```
+
+Keygen will add yourself to contacts list automatically.
+
+### Encrypt
+
+```shell
+# Identify recipient by name
+cismail e Neruthes <(echo "Hello world")
+# Identify recipient by public key (or trailing chars)
+cismail encrypt vst7mgpqskds8lg <(echo "Hello world")
+```
+
+### Decrypt
+
+```shell
+# Decrypt from clipboard
+xclip -selection clipboard -o | cismail d
+# Decrypt a file
+cismail decrypt /path/to/encrypted/message.asc
+```
+
+### Test Case
+
+Command:
+
+```shell
+$ cismail e $(ls ~/.config/cismail/self.age/* | head -n1) <(echo "Hello world") | cismail d
+```
+
+Output:
+
+```
+cismail: Valid: The message is sent to us: (Neruthes) kpid:age:age1s4zpwvrypemsn7ckn38uauedncy9m9yrn7dyak2trc7vst7mgpqskds8lg
+cismail: Hint: Message was created at Sat Feb 18 21:57:40 UTC 2023 (0d 0hr ago)
+cismail: Hint: Message was sent by 'Neruthes' (kpid:age:age1s4zpwvrypemsn7ckn38uauedncy9m9yrn7dyak2trc7vst7mgpqskds8lg)
+cismail: Hint: Search result: Neruthes kpid:age:age1s4zpwvrypemsn7ckn38uauedncy9m9yrn7dyak2trc7vst7mgpqskds8lg
+cismail: Below is raw message ---------------------------------------
+Hello world
+```
+
+
+
+
 ## Copyright
 
 Copyright (c) 2023 Neruthes.
