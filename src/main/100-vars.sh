@@ -1,0 +1,3 @@
+CONFDIR="$HOME/.config/cismail"
+
+        
